@@ -1,0 +1,52 @@
+[debug] [2025-10-21T19:50:39.938Z] ----------------------------------------------------------------------
+[debug] [2025-10-21T19:50:39.940Z] Command:       /Users/leslieecruz/.nvm/versions/node/v20.18.2/bin/node /Users/leslieecruz/.nvm/versions/node/v20.18.2/bin/firebase init firestore --project stanzaone-app
+[debug] [2025-10-21T19:50:39.940Z] CLI Version:   14.20.0
+[debug] [2025-10-21T19:50:39.940Z] Platform:      darwin
+[debug] [2025-10-21T19:50:39.940Z] Node Version:  v20.18.2
+[debug] [2025-10-21T19:50:39.940Z] Time:          Tue Oct 21 2025 13:50:39 GMT-0600 (Central Standard Time)
+[debug] [2025-10-21T19:50:39.940Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/leslieecruz/stanzaone-app
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2025-10-21T19:50:39.944Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-21T19:50:39.945Z] > authorizing via signed-in user (leslieecoder@gmail.com)
+[debug] [2025-10-21T19:50:39.945Z] Checked if tokens are valid: false, expires at: 1736288193507
+[debug] [2025-10-21T19:50:39.945Z] Checked if tokens are valid: false, expires at: 1736288193507
+[debug] [2025-10-21T19:50:39.945Z] > refreshing access token with scopes: []
+[debug] [2025-10-21T19:50:39.946Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-21T19:50:39.946Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-21T19:50:40.142Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2025-10-21T19:50:40.142Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-21T19:50:40.142Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/stanzaone-app [none]
+[debug] [2025-10-21T19:50:40.318Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/stanzaone-app 401
+[debug] [2025-10-21T19:50:40.318Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/stanzaone-app {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED"}}
+[debug] [2025-10-21T19:50:40.318Z] Got a 401 Unauthenticated error for a call that required authentication. Refreshing tokens.
+[debug] [2025-10-21T19:50:40.318Z] Checked if tokens are valid: false, expires at: 1736288193507
+[debug] [2025-10-21T19:50:40.318Z] Checked if tokens are valid: false, expires at: 1736288193507
+[debug] [2025-10-21T19:50:40.318Z] > refreshing access token with scopes: []
+[debug] [2025-10-21T19:50:40.319Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-10-21T19:50:40.319Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-21T19:50:40.401Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2025-10-21T19:50:40.401Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-10-21T19:50:40.402Z] Request to https://firebase.googleapis.com/v1beta1/projects/stanzaone-app had HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2025-10-21T19:50:40.590Z] FirebaseError: Request to https://firebase.googleapis.com/v1beta1/projects/stanzaone-app had HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+    at responseToError (/Users/leslieecruz/.nvm/versions/node/v20.18.2/lib/node_modules/firebase-tools/lib/responseToError.js:53:12)
+    at RetryOperation._fn (/Users/leslieecruz/.nvm/versions/node/v20.18.2/lib/node_modules/firebase-tools/lib/apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project stanzaone-app. Please make sure the project exists and your account has permission to access it.

@@ -10,6 +10,29 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-signature: var(--font-signature);
+
+  /* Custom color palette */
+  --color-primary: #4FC3F7;
+  --color-primary-hover: #39B7F5;
+  --color-secondary: #0288D1;
+  --color-secondary-hover: #0277BD;
+  --color-accent: #FF8A65;
+  --color-accent-hover: #FF7F50;
+  --color-neutral-dark: #1A1A1A;
+  --color-neutral-light: #FAFAFA;
+
+  /* Status colors */
+  --color-success: #4CAF50;
+  --color-success-hover: #45A049;
+  --color-warning: #FF9800;
+  --color-warning-hover: #F57C00;
+  --color-error: #F44336;
+  --color-error-hover: #D32F2F;
+  --color-cancel: #E57373;
+  --color-cancel-hover: #EF5350;
+  --color-info: #2196F3;
+  --color-info-hover: #1976D2;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +43,24 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #ffffff;
+  color: #000000;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Ensure text is readable everywhere */
+input, select, textarea, label, p, h1, h2, h3, button, a, span, td, th {
+  color: inherit;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-gray-500 {
+  color: #6b7280 !important;
 }
