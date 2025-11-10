@@ -32,8 +32,8 @@ export default function UnitDetailPage() {
 
   const [unit, setUnit] = useState<UnitData | null>(null);
   const [tenant, setTenant] = useState<TenantData | null>(null);
-  const [payments, setPayments] = useState<any[]>([]);
-  const [maintenanceRequests, setMaintenanceRequests] = useState<any[]>([]);
+  const [payments, setPayments] = useState<{id: string; amount: number; date: Date; status: string}[]>([]);
+  const [maintenanceRequests, setMaintenanceRequests] = useState<{id: string; title: string; description: string; priority: string; status: string; createdAt: Date}[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -87,11 +87,15 @@ export default function UnitDetailPage() {
               where("tenantEmail", "==", tenantData.email)
             );
             const paymentsSnapshot = await getDocs(paymentsQuery);
-            setPayments(paymentsSnapshot.docs.map(doc => ({
+            setPayments(paymentsSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
               id: doc.id,
-              ...doc.data(),
-              paidAt: doc.data().paidAt?.toDate(),
-            })));
+                amount: data.amount || 0,
+                date: data.paidAt?.toDate() || new Date(),
+                status: data.status || "pending",
+              };
+            }));
 
             // Fetch tenant's maintenance requests
             const maintenanceQuery = query(
@@ -99,10 +103,17 @@ export default function UnitDetailPage() {
               where("tenantId", "==", unitData.tenantId)
             );
             const maintenanceSnapshot = await getDocs(maintenanceQuery);
-            setMaintenanceRequests(maintenanceSnapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data(),
-            })));
+            setMaintenanceRequests(maintenanceSnapshot.docs.map(doc => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                title: data.title || "",
+                description: data.description || "",
+                priority: data.priority || "low",
+                status: data.status || "pending",
+                createdAt: data.createdAt?.toDate() || new Date(),
+              };
+            }));
           }
         }
       } catch (error) {
@@ -225,12 +236,12 @@ export default function UnitDetailPage() {
             ) : (
               <div className="space-y-2">
                 {payments.slice(0, 5).map((payment) => (
-                  <div key={payment.id} className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm">{payment.paidAt?.toLocaleDateString('es-ES')}</span>
-                    <span className="font-semibold text-green-600">
-                      ${payment.amount?.toLocaleString('es-MX')}
-                    </span>
-                  </div>
+                <div key={payment.id} className="flex justify-between items-center py-2 border-b">
+                <span className="text-sm">{payment.date.toLocaleDateString('es-ES')}</span>
+                <span className="font-semibold text-green-600">
+                ${payment.amount.toLocaleString('es-MX')}
+                </span>
+                </div>
                 ))}
               </div>
             )}

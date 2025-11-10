@@ -11,10 +11,9 @@ import SuccessMessage from "@/components/shared/SuccessMessage";
 export default function PayRentPage() {
   const { user } = useAuth();
   const router = useRouter();
-  const [unitInfo, setUnitInfo] = useState<any>(null);
+  const [unitInfo, setUnitInfo] = useState<{ unitId: string; unitNumber: string; complexName: string; rent: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<"online" | "deposit" | null>(null);
-  const [showDepositInfo, setShowDepositInfo] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLate, setIsLate] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -165,7 +164,7 @@ export default function PayRentPage() {
                 ⚠️ Pago Tardío - Penalización del 10%
               </p>
               <p className="text-red-700 text-sm mt-1">
-                Renta: ${unitInfo?.rent?.toLocaleString('es-MX')} + Penalización: ${(unitInfo?.rent * 0.1).toLocaleString('es-MX')} = Total: ${totalAmount.toLocaleString('es-MX')}
+              Renta: ${unitInfo?.rent?.toLocaleString('es-MX')} + Penalización: ${unitInfo && (unitInfo.rent * 0.1).toLocaleString('es-MX')} = Total: ${totalAmount.toLocaleString('es-MX')}
               </p>
             </div>
           )}

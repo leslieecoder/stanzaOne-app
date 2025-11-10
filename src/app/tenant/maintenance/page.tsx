@@ -1,9 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { collection, query, where, getDocs, deleteDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, where, deleteDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 import MaintenanceRequestForm from "@/components/tenant/MaintenanceRequestForm";
 
@@ -27,17 +27,8 @@ const [editTitle, setEditTitle] = useState("");
 const [editDescription, setEditDescription] = useState("");
 const [editPriority, setEditPriority] = useState("");
 const [showForm, setShowForm] = useState(false);
-const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      fetchUserData();
-      const unsubscribe = setupRequestsListener();
-      return unsubscribe; // Cleanup listener on unmount
-    }
-  }, [user]);
-
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -49,9 +40,9 @@ const [successMessage, setSuccessMessage] = useState<string | null>(null);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
-  };
+  }, [user]);
 
-  const setupRequestsListener = () => {
+  const setupRequestsListener = useCallback(() => {
     if (!user) return;
 
     const q = query(
@@ -77,7 +68,15 @@ const [successMessage, setSuccessMessage] = useState<string | null>(null);
     });
 
     return unsubscribe;
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchUserData();
+      const unsubscribe = setupRequestsListener();
+      return unsubscribe; // Cleanup listener on unmount
+    }
+  }, [user, fetchUserData, setupRequestsListener]);
 
   const handleDelete = async (requestId: string) => {
     if (!confirm("¿Está seguro de eliminar esta solicitud?")) return;
@@ -251,16 +250,13 @@ const [successMessage, setSuccessMessage] = useState<string | null>(null);
         <h2 className="text-xl font-semibold mb-4">Nueva Solicitud de Mantenimiento</h2>
         <div className="bg-white rounded-2xl shadow-md p-6">
         <MaintenanceRequestForm
-            unitId={userUnitId || undefined}
-              onSuccess={(message) => {
-                  setSuccessMessage(message);
-                  setShowForm(false);
-                  // Auto-hide success message after 3 seconds
-                  setTimeout(() => setSuccessMessage(null), 3000);
-                }}
-                onCancel={() => setShowForm(false)}
-              />
-            </div>
+        unitId={userUnitId || undefined}
+        onSuccess={() => {
+        setShowForm(false);
+        }}
+        onCancel={() => setShowForm(false)}
+        />
+        </div>
           </div>
         )}
       </div>

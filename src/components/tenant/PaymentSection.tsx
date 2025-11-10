@@ -1,12 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "@/context/AuthContext";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface PaymentSectionProps {
   rent: number;
@@ -53,7 +50,6 @@ export default function PaymentSection({ rent, unitNumber, complexName }: Paymen
 
         // Check if late (after 5th of current month)
         const today = now.getDate();
-        const paymentDue = new Date(currentYear, currentMonth, 5, 23, 59, 59);
         const late = today > 5 && !hasPaymentThisMonth;
         setIsLate(late);
         

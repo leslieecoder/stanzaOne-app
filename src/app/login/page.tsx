@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   sendPasswordResetEmail,
 } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebaseClient";
 import { useRouter } from "next/navigation";
@@ -55,28 +56,29 @@ export default function LoginPage() {
         await signInWithEmailAndPassword(auth, email, password);
         router.push("/");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const authError = error as FirebaseError;
       console.error("Auth error:", error);
 
       // User-friendly error messages
-      if (error.code === "auth/invalid-credential") {
-        setError(
-          "Correo electrónico o contraseña inválidos. Inténtelo de nuevo."
-        );
-      } else if (error.code === "auth/user-not-found") {
-        setError("No se encontró ninguna cuenta con este correo electrónico.");
-      } else if (error.code === "auth/wrong-password") {
-        setError("Contraseña incorrecta. Inténtelo de nuevo.");
-      } else if (error.code === "auth/email-already-in-use") {
-        setError(
-          "Este correo electrónico ya está registrado. Intente iniciar sesión."
-        );
-      } else if (error.code === "auth/weak-password") {
-        setError("La contraseña debe tener al menos 6 caracteres.");
-      } else if (error.code === "auth/invalid-email") {
-        setError("Por favor ingrese un correo electrónico válido.");
+      if (authError.code === "auth/invalid-credential") {
+      setError(
+      "Correo electrónico o contraseña inválidos. Inténtelo de nuevo."
+      );
+      } else if (authError.code === "auth/user-not-found") {
+      setError("No se encontró ninguna cuenta con este correo electrónico.");
+      } else if (authError.code === "auth/wrong-password") {
+      setError("Contraseña incorrecta. Inténtelo de nuevo.");
+      } else if (authError.code === "auth/email-already-in-use") {
+      setError(
+      "Este correo electrónico ya está registrado. Intente iniciar sesión."
+      );
+      } else if (authError.code === "auth/weak-password") {
+      setError("La contraseña debe tener al menos 6 caracteres.");
+      } else if (authError.code === "auth/invalid-email") {
+      setError("Por favor ingrese un correo electrónico válido.");
       } else {
-        setError("Algo salió mal. Por favor inténtelo de nuevo.");
+      setError("Algo salió mal. Por favor inténtelo de nuevo.");
       }
     } finally {
       setLoading(false);
@@ -97,18 +99,19 @@ export default function LoginPage() {
       alert(
         "Se ha enviado un enlace para restablecer la contraseña a su correo electrónico."
       );
-    } catch (error: any) {
-      console.error("Password reset error:", error);
-      if (error.code === "auth/user-not-found") {
-        setError("No se encontró ninguna cuenta con este correo electrónico.");
-      } else if (error.code === "auth/invalid-email") {
-        setError("Por favor ingrese un correo electrónico válido.");
-      } else {
-        setError(
-          "No se pudo enviar el enlace de restablecimiento. Por favor inténtelo de nuevo."
-        );
+    } catch (error: unknown) {
+    const pwdResetError = error as FirebaseError;
+    console.error("Password reset error:", error);
+    if (pwdResetError.code === "auth/user-not-found") {
+      setError("No se encontró ninguna cuenta con este correo electrónico.");
+    } else if (pwdResetError.code === "auth/invalid-email") {
+      setError("Por favor ingrese un correo electrónico válido.");
+    } else {
+    setError(
+      "No se pudo enviar el enlace de restablecimiento. Por favor inténtelo de nuevo."
+      );
       }
-    }
+     }
   };
 
   const handleGoogleSignIn = async () => {
@@ -134,21 +137,22 @@ export default function LoginPage() {
         // Existing user - redirect to home
         router.push("/");
       }
-    } catch (error: any) {
-      console.error("Google sign-in error:", error);
+    } catch (error: unknown) {
+    const googleError = error as FirebaseError;
+    console.error("Google sign-in error:", error);
 
-      if (error.code === "auth/popup-closed-by-user") {
-        setError("Inicio de sesión cancelado.");
-      } else if (error.code === "auth/popup-blocked") {
-        setError(
-          "Ventana emergente bloqueada. Por favor permita ventanas emergentes para este sitio."
-        );
-      } else {
-        setError(
-          "No se pudo iniciar sesión con Google. Por favor inténtelo de nuevo."
-        );
+    if (googleError.code === "auth/popup-closed-by-user") {
+      setError("Inicio de sesión cancelado.");
+    } else if (googleError.code === "auth/popup-blocked") {
+    setError(
+      "Ventana emergente bloqueada. Por favor permita ventanas emergentes para este sitio."
+      );
+    } else {
+    setError(
+      "No se pudo iniciar sesión con Google. Por favor inténtelo de nuevo."
+      );
       }
-    } finally {
+     } finally {
       setLoading(false);
     }
   };

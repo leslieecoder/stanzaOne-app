@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getDocs, orderBy, query, onSnapshot } from "firebase/firestore";
+import { collection, orderBy, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 
 interface Payment {
@@ -9,6 +9,7 @@ interface Payment {
   amount: number;
   tenantEmail: string;
   unitNumber: string;
+  complexName: string;
   status: string;
   paidAt: Date;
   method: string;
@@ -35,6 +36,7 @@ export default function PaymentsOverview() {
           amount: data.amount,
           tenantEmail: data.tenantEmail,
           unitNumber: data.unitNumber,
+          complexName: data.complexName || "Unknown Complex",
           status: data.status,
           paidAt: data.paidAt?.toDate() || new Date(),
           method: data.method || "online",

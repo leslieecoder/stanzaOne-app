@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebaseClient";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function NavBar() {
@@ -29,9 +30,11 @@ export default function NavBar() {
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div className="flex justify-between h-20 items-center">
           <Link href="/" className="flex items-center">
-          <img
+          <Image
           src="/assets/white-logo.svg"
           alt="StanzaOne"
+          width={100}
+          height={100}
           className="h-25 w-auto"
           />
           </Link>

@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 
@@ -13,25 +13,10 @@ interface UnitInfo {
   rent: number;
 }
 
-export default function TenantPage() {
-  const { user, userProfile, loading } = useAuth();
-  const router = useRouter();
+function PaymentStatusMessage() {
   const searchParams = useSearchParams();
-  const [unitInfo, setUnitInfo] = useState<UnitInfo | null>(null);
-  const [isPaidThisMonth, setIsPaidThisMonth] = useState(false);
-  const [nextPaymentDate, setNextPaymentDate] = useState<Date>(new Date());
-  const [contractSigned, setContractSigned] = useState(false);
-  const [maintenanceCount, setMaintenanceCount] = useState(0);
-  const [loadingData, setLoadingData] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
-  useEffect(() => {
-  if (!loading && (!user || userProfile?.role !== "tenant")) {
-  router.push("/login");
-  }
-  }, [user, userProfile, loading, router]);
-
-  // Check payment status from URL
   useEffect(() => {
     const payment = searchParams.get("payment");
     if (payment === "success") {
@@ -42,6 +27,40 @@ export default function TenantPage() {
       setTimeout(() => setPaymentStatus(null), 5000);
     }
   }, [searchParams]);
+
+  if (!paymentStatus) return null;
+
+  return (
+    <>
+      {paymentStatus === "success" && (
+        <div className="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg animate-pulse">
+          ✅ ¡Pago procesado exitosamente! Gracias por su pago.
+        </div>
+      )}
+      {paymentStatus === "cancelled" && (
+        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-6 py-4 rounded-lg">
+          ⚠️ Pago cancelado. Puede intentar nuevamente cuando esté listo.
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function TenantPage() {
+  const { user, userProfile, loading } = useAuth();
+  const router = useRouter();
+  const [unitInfo, setUnitInfo] = useState<UnitInfo | null>(null);
+  const [isPaidThisMonth, setIsPaidThisMonth] = useState(false);
+  const [nextPaymentDate, setNextPaymentDate] = useState<Date>(new Date());
+  const [contractSigned, setContractSigned] = useState(false);
+  const [maintenanceCount, setMaintenanceCount] = useState(0);
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+  if (!loading && (!user || userProfile?.role !== "tenant")) {
+  router.push("/login");
+  }
+  }, [user, userProfile, loading, router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -147,17 +166,10 @@ export default function TenantPage() {
   return (
   <div className="min-h-screen bg-gray-50 pt-8 pb-8">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        {/* Payment Success/Cancel Messages */}
-        {paymentStatus === "success" && (
-          <div className="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg animate-pulse">
-            ✅ ¡Pago procesado exitosamente! Gracias por su pago.
-          </div>
-        )}
-        {paymentStatus === "cancelled" && (
-          <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 px-6 py-4 rounded-lg">
-            ⚠️ Pago cancelado. Puede intentar nuevamente cuando esté listo.
-          </div>
-        )}
+  {/* Payment Success/Cancel Messages */}
+  <Suspense fallback={null}>
+  <PaymentStatusMessage />
+  </Suspense>
 
         {/* Hero Card - Unit Info & Payment Status */}
         <div className="bg-linear-to-br from-(--color-primary) to-(--color-secondary) rounded-2xl shadow-xl p-6 text-white">

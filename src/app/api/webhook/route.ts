@@ -3,9 +3,7 @@ import Stripe from "stripe";
 import { db } from "@/lib/firebaseClient";
 import { addDoc, collection } from "firebase/firestore";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-12-18.acacia",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -19,8 +17,9 @@ export async function POST(request: NextRequest) {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET || ""
     );
-  } catch (err: any) {
-    console.error("Webhook signature verification failed:", err.message);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Unknown webhook error";
+    console.error("Webhook signature verification failed:", errorMessage);
     return NextResponse.json({ error: "Webhook error" }, { status: 400 });
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getDocs, doc, updateDoc, query, where } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebaseClient";
 
 interface Unit {
@@ -24,7 +24,6 @@ export default function AssignTenant() {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedTenant, setSelectedTenant] = useState("");
   const [leaseStartDate, setLeaseStartDate] = useState(new Date().toISOString().split('T')[0]);
-  const [complexData, setComplexData] = useState<{id: string, leaseDuration: number} | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Fetch vacant units and unassigned tenants
