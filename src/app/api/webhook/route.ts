@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { db } from "@/lib/firebaseClient";
 import { addDoc, collection } from "firebase/firestore";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -28,6 +27,9 @@ export async function POST(request: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
+      // Dynamically import firebaseClient to avoid build-time initialization
+      const { db } = await import("@/lib/firebaseClient");
+      
       // Save payment to Firestore
       await addDoc(collection(db, "payments"), {
         amount: session.amount_total! / 100,
