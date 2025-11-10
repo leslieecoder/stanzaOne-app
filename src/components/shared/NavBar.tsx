@@ -93,9 +93,9 @@ export default function NavBar() {
             ) : (
               <Link
                 href="/login"
-                className="bg-(--color-primary) text-white px-4 py-2 rounded-md hover:bg-(--color-primary-hover) text-sm"
+                className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-900 text-sm"
               >
-                Iniciar Sesión
+                <span className="text-white">Iniciar Sesión</span>
               </Link>
             )}
           </div>

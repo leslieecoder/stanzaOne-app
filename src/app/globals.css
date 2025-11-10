@@ -49,7 +49,7 @@ body {
 }
 
 /* Ensure text is readable everywhere */
-input, select, textarea, label, p, h1, h2, h3, button, a, span, td, th {
+input, select, textarea, label, p, h1, h2, h3, button, span, td, th {
   color: inherit;
 }
 
